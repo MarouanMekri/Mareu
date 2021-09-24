@@ -1,6 +1,7 @@
 package com.nucleon.maru.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,14 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nucleon.maru.Adapter.ListMeetingAdapter;
+import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.R;
 import com.nucleon.maru.ViewModel.ListMeetingViewModel;
+import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.ActivityListMeetingBinding;
 
-public class ListMeetingActivity extends AppCompatActivity implements AddMeetingFragment.OnItemClickedListener {
+import java.util.List;
+
+public class ListMeetingActivity extends AppCompatActivity implements MainNavigator {
 
     private ActivityListMeetingBinding binding;
     private ListMeetingViewModel listMeetingViewModel;
@@ -27,12 +34,13 @@ public class ListMeetingActivity extends AppCompatActivity implements AddMeeting
         View view = binding.getRoot();
         setContentView(view);
 
-        listMeetingViewModel = ViewModelProviders.of(this).get(ListMeetingViewModel.class);
+        listMeetingViewModel = new ViewModelProvider(this).get(ListMeetingViewModel.class);
 
         binding.fabAddMeeting.setOnClickListener(v -> {
             AddMeetingFragment addMeetingFragment = new AddMeetingFragment();
             addMeetingFragment.show(getSupportFragmentManager(), "AddMeetingFragment");
         });
+
     }
 
     @Override
@@ -41,15 +49,20 @@ public class ListMeetingActivity extends AppCompatActivity implements AddMeeting
         return true;
     }
 
-    @Override
-    public void onItemClicked(View view) {
-        initRecycler();
-    }
-
     void initRecycler() {
         ListMeetingAdapter adapter = new ListMeetingAdapter(listMeetingViewModel.getMeetings().getValue());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         binding.listMeetings.setLayoutManager(layoutManager);
         binding.listMeetings.setAdapter(adapter);
+    }
+
+    @Override
+        public void itemDelete(Meeting meeting) {
+        listMeetingViewModel.deleteMeeting(meeting);
+    }
+
+    @Override
+    public void itemCreate(View view) {
+        initRecycler();
     }
 }

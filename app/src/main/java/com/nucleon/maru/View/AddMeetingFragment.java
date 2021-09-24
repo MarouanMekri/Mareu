@@ -10,19 +10,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.R;
+import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.ViewModel.AddMeetingViewModel;
+import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.FragmentAddMeetingBinding;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddMeetingFragment extends DialogFragment implements View.OnClickListener {
+public class AddMeetingFragment extends DialogFragment implements MainNavigator {
 
     private FragmentAddMeetingBinding binding;
     private AddMeetingViewModel addMeetingViewModel;
@@ -30,11 +35,7 @@ public class AddMeetingFragment extends DialogFragment implements View.OnClickLi
     private int lastSelectedHour;
     private int lastSelectedMinute;
 
-    private OnItemClickedListener myCallback;
-
-    public interface OnItemClickedListener {
-        void onItemClicked(View view);
-    }
+    private MainNavigator navigator;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class AddMeetingFragment extends DialogFragment implements View.OnClickLi
         binding = FragmentAddMeetingBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        addMeetingViewModel = ViewModelProviders.of(this).get(AddMeetingViewModel.class);
+        addMeetingViewModel = new ViewModelProvider(this).get(AddMeetingViewModel.class);
 
         // Setup spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.rooms, android.R.layout.simple_spinner_dropdown_item);
@@ -62,7 +63,7 @@ public class AddMeetingFragment extends DialogFragment implements View.OnClickLi
         });
 
         // Callback button
-        binding.btnAddMeeting.setOnClickListener(this);
+        binding.btnAddMeeting.setOnClickListener(this::itemCreate);
 
         return view;
     }
@@ -73,8 +74,20 @@ public class AddMeetingFragment extends DialogFragment implements View.OnClickLi
         this.createCallbackToParentActivity();
     }
 
+    private void createCallbackToParentActivity(){
+        try {
+            // Parent activity will automatically subscribe to callback
+            navigator = (MainNavigator) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.toString()+ " must implement OnButtonClickedListener");
+        }
+    }
+
     @Override
-    public void onClick(View v) {
+    public void itemDelete(Meeting meeting) {}
+
+    @Override
+    public void itemCreate(View view) {
         // Get meeting info from the form
         String subject = binding.edtSubject.getText().toString();
         List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
@@ -88,18 +101,9 @@ public class AddMeetingFragment extends DialogFragment implements View.OnClickLi
             Meeting meeting = new Meeting(date, subject, room, participants);
             addMeetingViewModel.createMeeting(meeting);
             // Updating recyclerView
-            myCallback.onItemClicked(v);
+            navigator.itemCreate(view);
             // Close dialog fragment
             dismiss();
-        }
-    }
-
-    private void createCallbackToParentActivity(){
-        try {
-            // Parent activity will automatically subscribe to callback
-            myCallback = (OnItemClickedListener) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(e.toString()+ " must implement OnButtonClickedListener");
         }
     }
 }

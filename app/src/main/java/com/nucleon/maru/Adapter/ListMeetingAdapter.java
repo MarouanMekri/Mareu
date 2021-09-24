@@ -10,9 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
+import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.FragmentMeetingRowBinding;
 
+import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -53,6 +56,7 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         // Show the row in recyclerview
         holder.item_list_title.setText(title);
         holder.item_list_subtitle.setText(participants);
+
     }
 
     @Override

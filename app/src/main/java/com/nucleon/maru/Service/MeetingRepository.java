@@ -7,28 +7,23 @@ import com.nucleon.maru.Model.Meeting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeetingRepository {
+public class MeetingRepository implements ApiService{
 
-    private static MeetingRepository instance;
     private final List<Meeting> meetingsList = new ArrayList<>();
 
-    public static MeetingRepository getInstance() {
-        if (instance == null) {
-            instance = new MeetingRepository();
-        }
-        return instance;
-    }
-
+    @Override
     public MutableLiveData<List<Meeting>> getMeetings() {
         MutableLiveData<List<Meeting>> data = new MutableLiveData<>();
         data.setValue(meetingsList);
         return data;
     }
 
+    @Override
     public void createMeeting(Meeting meeting) {
         meetingsList.add(meeting);
     }
 
+    @Override
     public void deleteMeeting(Meeting meeting) {
         meetingsList.remove(meeting);
     }
