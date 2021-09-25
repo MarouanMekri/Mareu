@@ -10,15 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.R;
-import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.ViewModel.AddMeetingViewModel;
 import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.FragmentAddMeetingBinding;
@@ -82,9 +78,6 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
             throw new ClassCastException(e.toString()+ " must implement OnButtonClickedListener");
         }
     }
-
-    @Override
-    public void itemDelete(Meeting meeting) {}
 
     @Override
     public void itemCreate(View view) {

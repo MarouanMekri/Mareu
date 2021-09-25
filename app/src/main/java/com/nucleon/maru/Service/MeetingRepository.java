@@ -1,7 +1,5 @@
 package com.nucleon.maru.Service;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.nucleon.maru.Model.Meeting;
 
 import java.util.ArrayList;
@@ -12,10 +10,8 @@ public class MeetingRepository implements ApiService {
     private final List<Meeting> meetingsList = new ArrayList<>();
 
     @Override
-    public MutableLiveData<List<Meeting>> getMeetings() {
-        MutableLiveData<List<Meeting>> data = new MutableLiveData<>();
-        data.setValue(meetingsList);
-        return data;
+    public List<Meeting> getMeetings() {
+        return meetingsList;
     }
 
     @Override

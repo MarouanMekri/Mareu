@@ -7,20 +7,16 @@ import androidx.lifecycle.ViewModel;
 import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.Service.ApiService;
-import com.nucleon.maru.Service.MeetingRepository;
 
 import java.util.List;
 
 public class ListMeetingViewModel extends ViewModel {
 
     private final ApiService apiService = DI.getApiService();
+    public MutableLiveData<List<Meeting>> mutableMeetingsList = new MutableLiveData<>();
 
     public LiveData<List<Meeting>> getMeetings() {
-        MutableLiveData<List<Meeting>> mutableMeetingsList;
-        return mutableMeetingsList = apiService.getMeetings();
-    }
-
-    public void deleteMeeting(Meeting meeting) {
-        apiService.deleteMeeting(meeting);
+        mutableMeetingsList.setValue(apiService.getMeetings());
+        return mutableMeetingsList;
     }
 }

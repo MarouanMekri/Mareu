@@ -1,27 +1,25 @@
 package com.nucleon.maru.Adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
-import com.nucleon.maru.ViewModel.MainNavigator;
+import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.databinding.FragmentMeetingRowBinding;
 
-import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.List;
 
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
 
     private final List<Meeting> meetingList;
+    private final ApiService apiService = DI.getApiService();
 
     public ListMeetingAdapter(List<Meeting> meetingList) {
         this.meetingList = meetingList;
@@ -53,10 +51,14 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
                 participants = MessageFormat.format("{0}, {1}", participants, participantList.get(i));
             }
         }
-        // Show the row in recyclerview
+        // Show recyclerview row
         holder.item_list_title.setText(title);
         holder.item_list_subtitle.setText(participants);
-
+        // Delete a row
+        holder.item_list_delete.setOnClickListener(v -> {
+            apiService.deleteMeeting(meetingList.get(position));
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -67,11 +69,13 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView item_list_title;
         private final TextView item_list_subtitle;
+        private final ImageView item_list_delete;
 
         public ViewHolder(FragmentMeetingRowBinding itemBinding) {
             super(itemBinding.getRoot());
             item_list_title = itemBinding.itemListTitle;
             item_list_subtitle = itemBinding.itemListSubtitle;
+            item_list_delete = itemBinding.itemListDelete;
         }
     }
 }
