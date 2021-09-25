@@ -57,7 +57,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
     }
 
     @Override
-        public void itemDelete(Meeting meeting) {
+    public void itemDelete(Meeting meeting) {
         listMeetingViewModel.deleteMeeting(meeting);
     }
 
