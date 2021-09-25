@@ -7,7 +7,7 @@ import com.nucleon.maru.Model.Meeting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeetingRepository implements ApiService{
+public class MeetingRepository implements ApiService {
 
     private final List<Meeting> meetingsList = new ArrayList<>();
 
