@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Ma réu</string>
-    <string name="filter">Filter</string>
+    <string name="filter">Filtres</string>
     <string name="filter_option_1">Trier par date</string>
     <string name="filter_option_2">Trier par lieu</string>
+    <string name="filter_reset">Réinitialiser les filtres</string>
     <string-array name="rooms">
         <item>Réunion A</item>
         <item>Réunion B</item>

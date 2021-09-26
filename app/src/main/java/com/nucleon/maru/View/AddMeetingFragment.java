@@ -1,8 +1,10 @@
 package com.nucleon.maru.View;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,12 @@ import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.FragmentAddMeetingBinding;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class AddMeetingFragment extends DialogFragment implements MainNavigator {
 
@@ -83,11 +89,19 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
     public void itemCreate(View view) {
         // Get meeting info from the form
         String subject = binding.edtSubject.getText().toString();
-        List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
         String room = binding.spinner.getSelectedItem().toString();
-        String date = binding.edtDate.getText().toString();
+        String inputDate = binding.edtDate.getText().toString();
+        List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
+        // Parsing inputDate from String to Date
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        try {
+            date = dateFormat.parse(inputDate);
+        }catch (ParseException ex) {
+            Log.d("Parsing inputDate", Objects.requireNonNull(ex.getLocalizedMessage()));
+        }
         // Data checking
-        if (subject.isEmpty() || participants.isEmpty() || room.isEmpty() || date.isEmpty()){
+        if (subject.isEmpty() || participants.isEmpty() || room.isEmpty() || inputDate.isEmpty()){
             Toast.makeText(getContext(), "Please complete the form...", Toast.LENGTH_SHORT).show();
         } else {
             // Create a meeting

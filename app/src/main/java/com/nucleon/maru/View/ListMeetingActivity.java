@@ -2,8 +2,8 @@ package com.nucleon.maru.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,27 +17,39 @@ import com.nucleon.maru.databinding.ActivityListMeetingBinding;
 
 public class ListMeetingActivity extends AppCompatActivity implements MainNavigator {
 
+    private ActivityListMeetingBinding binding;
+    private ListMeetingViewModel listMeetingViewModel;
     private ListMeetingAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.nucleon.maru.databinding.ActivityListMeetingBinding binding = ActivityListMeetingBinding.inflate(getLayoutInflater());
+        // ViewBinding initialization
+        binding = ActivityListMeetingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        ListMeetingViewModel listMeetingViewModel = new ViewModelProvider(this).get(ListMeetingViewModel.class);
+        // ModelView initialization
+        listMeetingViewModel = new ViewModelProvider(this).get(ListMeetingViewModel.class);
 
-        adapter = new ListMeetingAdapter(listMeetingViewModel.getMeetings().getValue());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        binding.listMeetings.setLayoutManager(layoutManager);
-        binding.listMeetings.setAdapter(adapter);
+        // RecyclerView initialization
+        initRecyclerView();
 
+        // Add meeting button
         binding.fabAddMeeting.setOnClickListener(v -> {
             AddMeetingFragment addMeetingFragment = new AddMeetingFragment();
             addMeetingFragment.show(getSupportFragmentManager(), "AddMeetingFragment");
         });
 
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new ListMeetingAdapter(listMeetingViewModel.getMeetings().getValue());
+        DividerItemDecoration decoration = new DividerItemDecoration(binding.listMeetings.getContext(), layoutManager.getOrientation());
+        binding.listMeetings.setLayoutManager(layoutManager);
+        binding.listMeetings.addItemDecoration(decoration);
+        binding.listMeetings.setAdapter(adapter);
     }
 
     @Override
@@ -48,6 +60,6 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filter_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 }

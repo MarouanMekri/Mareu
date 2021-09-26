@@ -15,6 +15,7 @@ public class ListMeetingViewModel extends ViewModel {
     private final ApiService apiService = DI.getApiService();
     public MutableLiveData<List<Meeting>> mutableMeetingsList = new MutableLiveData<>();
 
+    // Return meetings list
     public LiveData<List<Meeting>> getMeetings() {
         mutableMeetingsList.setValue(apiService.getMeetings());
         return mutableMeetingsList;

@@ -14,6 +14,7 @@ import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.databinding.FragmentMeetingRowBinding;
 
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
@@ -36,11 +37,16 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         // Getting date from view
         String subject = meetingList.get(position).getSubject();
         String room = meetingList.get(position).getRoom();
-        String date = meetingList.get(position).getDate();
+        Date date = meetingList.get(position).getDate();
         // Change date format
-        date = date.replace(":", "h");
+        StringBuilder outputDate = new StringBuilder(date.toString());
+        // format : EEE MMM dd hh:mm:ss z yyyy ==> hh:mm:ss z yyyy
+        outputDate.delete(0,11);
+        // format : hh:mm:ss z yyyy ==> hh:mm
+        outputDate.delete(5,23);
+        outputDate.replace(2,3,"h");
         // Build title
-        String title = MessageFormat.format("{0} - {1} - {2}", room, date, subject);
+        String title = MessageFormat.format("{0} - {1} - {2}", room, outputDate, subject);
         // Split participantList
         List<String> participantList = meetingList.get(position).getParticipants();
         String participants = "";
@@ -66,7 +72,9 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         return meetingList.size();
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        // UI components
         private final TextView item_list_title;
         private final TextView item_list_subtitle;
         private final ImageView item_list_delete;

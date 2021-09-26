@@ -5,7 +5,7 @@ import com.nucleon.maru.Service.MeetingRepository;
 
 public class DI {
 
-    private static ApiService service = new MeetingRepository();
+    private static final ApiService service = new MeetingRepository();
 
     public static ApiService getApiService() {
         return service;
