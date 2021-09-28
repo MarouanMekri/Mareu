@@ -60,7 +60,7 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         // Show recyclerview row
         holder.item_list_title.setText(title);
         holder.item_list_subtitle.setText(participants);
-        // Delete a row
+        // Delete recyclerview row
         holder.item_list_delete.setOnClickListener(v -> {
             apiService.deleteMeeting(meetingList.get(position));
             notifyDataSetChanged();
@@ -71,7 +71,6 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
     public int getItemCount() {
         return meetingList.size();
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI components
