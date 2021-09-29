@@ -19,10 +19,15 @@ import java.util.List;
 
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
 
-    private final List<Meeting> meetingList;
+    private List<Meeting> meetingList;
     private final ApiService apiService = DI.getApiService();
 
     public ListMeetingAdapter(List<Meeting> meetingList) {
+        this.meetingList = meetingList;
+    }
+
+    // Updating UI
+    public void setData(List<Meeting> meetingList) {
         this.meetingList = meetingList;
     }
 
@@ -40,9 +45,9 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         Date date = meetingList.get(position).getDate();
         // Change date format
         StringBuilder outputDate = new StringBuilder(date.toString());
-        // format : EEE MMM dd hh:mm:ss z yyyy ==> hh:mm:ss z yyyy
+        // Format : EEE MMM dd hh:mm:ss z yyyy ==> hh:mm:ss z yyyy
         outputDate.delete(0,11);
-        // format : hh:mm:ss z yyyy ==> hh:mm
+        // Format : hh:mm:ss z yyyy ==> hh:mm
         outputDate.delete(5,23);
         outputDate.replace(2,3,"h");
         // Build title

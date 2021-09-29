@@ -12,14 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nucleon.maru.Adapter.ListMeetingAdapter;
-import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.R;
 import com.nucleon.maru.ViewModel.ListMeetingViewModel;
 import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.ActivityListMeetingBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ListMeetingActivity extends AppCompatActivity implements MainNavigator {
 
@@ -27,36 +23,37 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
     private ListMeetingViewModel listMeetingViewModel;
     private ListMeetingAdapter adapter;
 
-    private List<Meeting> meetings = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // ViewBinding initialization
         binding = ActivityListMeetingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        // ModelView initialization
+        // ViewModel initialization
         listMeetingViewModel = new ViewModelProvider(this).get(ListMeetingViewModel.class);
-
-        // Retrieve meetings list from VM
-        meetings = listMeetingViewModel.getMeetings().getValue();
 
         // RecyclerView initialization
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DividerItemDecoration decoration = new DividerItemDecoration(binding.listMeetings.getContext(), layoutManager.getOrientation());
         binding.listMeetings.setLayoutManager(layoutManager);
         binding.listMeetings.addItemDecoration(decoration);
-        adapter = new ListMeetingAdapter(meetings);
+        adapter = new ListMeetingAdapter(listMeetingViewModel.getMeetingsLiveData().getValue());
         binding.listMeetings.setAdapter(adapter);
+
+        // Observe data
+        listMeetingViewModel.getMeetingsLiveData().observe(this, meetings -> {
+            adapter.setData(meetings);
+            binding.listMeetings.setAdapter(adapter);
+        });
 
         // Add meeting button
         binding.fabAddMeeting.setOnClickListener(v -> {
             AddMeetingFragment addMeetingFragment = new AddMeetingFragment();
             addMeetingFragment.show(getSupportFragmentManager(), "AddMeetingFragment");
         });
-
     }
 
     @Override

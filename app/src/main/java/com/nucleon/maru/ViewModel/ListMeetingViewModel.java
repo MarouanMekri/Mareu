@@ -14,34 +14,34 @@ import com.nucleon.maru.Service.ApiService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 public class ListMeetingViewModel extends ViewModel {
 
-    private final ApiService apiService = DI.getApiService();
-    public MutableLiveData<List<Meeting>> mutableMeetingsList = new MutableLiveData<>();
+    private ApiService apiService = DI.getApiService();
+    public MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>();
 
     public final List<Meeting> meetingList = new ArrayList<>();
 
     // Return meetings list
-    public LiveData<List<Meeting>> getMeetings() {
-        mutableMeetingsList.setValue(apiService.getMeetings());
-        return mutableMeetingsList;
+    public LiveData<List<Meeting>> getMeetingsLiveData() {
+        meetingsLiveData.setValue(apiService.getMeetings());
+        return meetingsLiveData;
     }
 
     // Time Filter
     public void filterByTime(Context context) {
+        // Default date
         int selectedYear = 1970;
         int selectedMonth = 1;
         int selectedDayOfMonth = 1;
 
         TimePickerDialog.OnTimeSetListener timeSetListener = (timePicker, hour, minute) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.set(selectedYear, selectedMonth, selectedDayOfMonth, hour, minute);
-            // notify adapter with empty list
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(selectedYear, selectedMonth, selectedDayOfMonth, hour, minute);
             meetingList.clear();
-            // notify adapter with new list
-            meetingList.addAll(apiService.getMeetingsFilteredByDate(cal.getTime()));
+            meetingsLiveData.setValue(meetingList);
+            meetingList.addAll(apiService.getMeetingsFilteredByDate(calendar.getTime()));
+            meetingsLiveData.setValue(meetingList);
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(context, timeSetListener, 12, 0, true);
         timePickerDialog.show();
@@ -53,6 +53,8 @@ public class ListMeetingViewModel extends ViewModel {
     // Reset filters
     public void resetFilters() {
         meetingList.clear();
-        meetingList.addAll(Objects.requireNonNull(getMeetings().getValue()));
+        meetingsLiveData.setValue(meetingList);
+        meetingList.addAll(apiService.getMeetings());
+        meetingsLiveData.setValue(meetingList);
     }
 }
