@@ -14,13 +14,14 @@ import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.databinding.FragmentMeetingRowBinding;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
 
-    private List<Meeting> meetingList;
     private final ApiService apiService = DI.getApiService();
+    private List<Meeting> meetingList;
 
     public ListMeetingAdapter(List<Meeting> meetingList) {
         this.meetingList = meetingList;
@@ -29,6 +30,12 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
     // Updating UI
     public void setData(List<Meeting> meetingList) {
         this.meetingList = meetingList;
+    }
+
+    public void setFilter(List<Meeting> filteredList) {
+        meetingList = new ArrayList<>();
+        meetingList.addAll(filteredList);
+        notifyDataSetChanged();
     }
 
     @NonNull

@@ -10,7 +10,8 @@
     <item
         android:id="@+id/filter_room"
         android:title="@string/filter_option_2"
-        app:showAsAction="never"/>
+        app:showAsAction="collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <item
         android:id="@+id/filters_reset"

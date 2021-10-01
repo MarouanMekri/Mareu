@@ -75,13 +75,14 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
                 listMeetingViewModel.filterByTime(ListMeetingActivity.this);
                 return true;
             case R.id.filter_room:
-                listMeetingViewModel.filterByRoom(ListMeetingActivity.this);
+                listMeetingViewModel.filterByRoom(item, adapter);
                 return true;
             case R.id.filters_reset:
-                listMeetingViewModel.resetFilters();
+                listMeetingViewModel.resetFilters(adapter);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

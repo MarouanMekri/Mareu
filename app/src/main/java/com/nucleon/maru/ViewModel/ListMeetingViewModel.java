@@ -2,11 +2,14 @@ package com.nucleon.maru.ViewModel;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.view.MenuItem;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.nucleon.maru.Adapter.ListMeetingAdapter;
 import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.Service.ApiService;
@@ -14,13 +17,14 @@ import com.nucleon.maru.Service.ApiService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class ListMeetingViewModel extends ViewModel {
 
-    private ApiService apiService = DI.getApiService();
-    public MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>();
+    private final ApiService apiService = DI.getApiService();
 
-    public final List<Meeting> meetingList = new ArrayList<>();
+    private final MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>();
+    private final List<Meeting> meetingList = new ArrayList<>();
 
     // Return meetings list
     public LiveData<List<Meeting>> getMeetingsLiveData() {
@@ -48,13 +52,36 @@ public class ListMeetingViewModel extends ViewModel {
     }
 
     // Room Filter
-    public void filterByRoom(Context context) {}
+    public void filterByRoom(MenuItem item, ListMeetingAdapter adapter) {
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Create temporary list
+                List<Meeting> filteredList = new ArrayList<>();
+                // For each meeting in livedata list
+                for (Meeting meeting : Objects.requireNonNull(getMeetingsLiveData().getValue())) {
+                    // Filter
+                    if (meeting.getRoom().toLowerCase().contains(newText.toLowerCase().trim())) {
+                        filteredList.add(meeting);
+                    }
+                }
+                // Requesting update with filter
+                adapter.setFilter(filteredList);
+                return false;
+            }
+        });
+    }
 
     // Reset filters
-    public void resetFilters() {
+    public void resetFilters(ListMeetingAdapter adapter) {
         meetingList.clear();
-        meetingsLiveData.setValue(meetingList);
         meetingList.addAll(apiService.getMeetings());
         meetingsLiveData.setValue(meetingList);
+        adapter.notifyDataSetChanged();
     }
 }
