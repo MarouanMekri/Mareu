@@ -26,8 +26,9 @@ import java.util.Random;
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
 
     private final ApiService apiService = DI.getApiService();
+    private final Context context;
+
     private List<Meeting> meetingList;
-    private Context context;
 
     public ListMeetingAdapter(Context context, List<Meeting> meetingList) {
         this.meetingList = meetingList;
