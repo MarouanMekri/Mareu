@@ -40,7 +40,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
         DividerItemDecoration decoration = new DividerItemDecoration(binding.listMeetings.getContext(), layoutManager.getOrientation());
         binding.listMeetings.setLayoutManager(layoutManager);
         binding.listMeetings.addItemDecoration(decoration);
-        adapter = new ListMeetingAdapter(listMeetingViewModel.getMeetingsLiveData().getValue());
+        adapter = new ListMeetingAdapter(this, listMeetingViewModel.getMeetingsLiveData().getValue());
         binding.listMeetings.setAdapter(adapter);
 
         // Observe data

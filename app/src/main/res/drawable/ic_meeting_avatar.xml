@@ -6,7 +6,4 @@
     android:thicknessRatio="2.0"
     android:useLevel="false" >
 
-    <solid
-        android:color="@color/avatar_cyan"/>
-
 </shape>

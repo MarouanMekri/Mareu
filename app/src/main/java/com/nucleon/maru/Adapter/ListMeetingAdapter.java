@@ -1,30 +1,37 @@
 package com.nucleon.maru.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
+import com.nucleon.maru.R;
 import com.nucleon.maru.Service.ApiService;
 import com.nucleon.maru.databinding.FragmentMeetingRowBinding;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.ViewHolder> {
 
     private final ApiService apiService = DI.getApiService();
     private List<Meeting> meetingList;
+    private Context context;
 
-    public ListMeetingAdapter(List<Meeting> meetingList) {
+    public ListMeetingAdapter(Context context, List<Meeting> meetingList) {
         this.meetingList = meetingList;
+        this.context = context;
     }
 
     // Updating UI
@@ -77,6 +84,11 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
             apiService.deleteMeeting(meetingList.get(position));
             notifyDataSetChanged();
         });
+        // Select randomly avatar color
+        List<Integer> colors = Arrays.asList(R.color.avatar_cyan, R.color.avatar_green, R.color.avatar_red);
+        Random random = new Random();
+        int randomColor = colors.get(random.nextInt(colors.size()));
+        holder.item_list_avatar.setBackgroundTintList(ContextCompat.getColorStateList(context, randomColor));
     }
 
     @Override
@@ -89,12 +101,14 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
         private final TextView item_list_title;
         private final TextView item_list_subtitle;
         private final ImageView item_list_delete;
+        private final ImageView item_list_avatar;
 
         public ViewHolder(FragmentMeetingRowBinding itemBinding) {
             super(itemBinding.getRoot());
             item_list_title = itemBinding.itemListTitle;
             item_list_subtitle = itemBinding.itemListSubtitle;
             item_list_delete = itemBinding.itemListDelete;
+            item_list_avatar = itemBinding.itemListAvatar;
         }
     }
 }
