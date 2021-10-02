@@ -41,7 +41,7 @@ public class ListMeetingAdapter extends RecyclerView.Adapter<ListMeetingAdapter.
     }
 
     public void setFilter(List<Meeting> filteredList) {
-        meetingList = new ArrayList<>();
+        meetingList.clear();
         meetingList.addAll(filteredList);
         notifyDataSetChanged();
     }
