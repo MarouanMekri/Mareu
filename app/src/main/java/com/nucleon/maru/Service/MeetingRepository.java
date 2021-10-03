@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class MeetingRepository implements ApiService {
 
@@ -26,6 +27,17 @@ public class MeetingRepository implements ApiService {
             meetingCal.setTime(meetingsList.get(i).getDate());
             boolean isMatched = filterCal.get(Calendar.HOUR_OF_DAY) == meetingCal.get(Calendar.HOUR_OF_DAY) && filterCal.get(Calendar.MINUTE) == meetingCal.get(Calendar.MINUTE);
             if (isMatched) result.add(meetingsList.get(i));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsFilteredByRoom(String room) {
+        List<Meeting> result = new ArrayList<>();
+        for (Meeting meeting : Objects.requireNonNull(meetingsList)) {
+            if (meeting.getRoom().toLowerCase().contains(room.toLowerCase().trim())) {
+                result.add(meeting);
+            }
         }
         return result;
     }

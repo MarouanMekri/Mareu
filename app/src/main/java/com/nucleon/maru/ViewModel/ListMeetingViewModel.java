@@ -17,7 +17,6 @@ import com.nucleon.maru.Service.ApiService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 public class ListMeetingViewModel extends ViewModel {
 
@@ -52,7 +51,7 @@ public class ListMeetingViewModel extends ViewModel {
     }
 
     // Room Filter
-    public void filterByRoom(MenuItem item, ListMeetingAdapter adapter) {
+    public void filterByRoom(MenuItem item) {
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -61,17 +60,10 @@ public class ListMeetingViewModel extends ViewModel {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Create temporary list
-                List<Meeting> filteredList = new ArrayList<>();
-                // For each meeting in livedata list
-                for (Meeting meeting : Objects.requireNonNull(getMeetingsLiveData().getValue())) {
-                    // Filter
-                    if (meeting.getRoom().toLowerCase().contains(newText.toLowerCase().trim())) {
-                        filteredList.add(meeting);
-                    }
-                }
-                // Requesting update with filter
-                adapter.setFilter(filteredList);
+                meetingList.clear();
+                meetingsLiveData.setValue(meetingList);
+                meetingList.addAll(apiService.getMeetingsFilteredByRoom(newText));
+                meetingsLiveData.setValue(meetingList);
                 return false;
             }
         });
