@@ -24,8 +24,8 @@ public class AddMeetingViewModel extends ViewModel {
         apiService.createMeeting(meeting);
     }
 
+    // Parsing inputDate from String to Date
     public Date parsingDate(String inputDate) {
-        // Parsing inputDate from String to Date
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         try {
             date = dateFormat.parse(inputDate);
@@ -35,6 +35,7 @@ public class AddMeetingViewModel extends ViewModel {
         return date;
     }
 
+    // Meeting form validation
     public boolean isFormValid(String subject, String room, String inputDate, List<String> participants) {
         boolean result;
         // Data checking
