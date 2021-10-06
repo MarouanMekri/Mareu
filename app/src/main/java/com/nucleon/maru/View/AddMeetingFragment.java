@@ -1,10 +1,8 @@
 package com.nucleon.maru.View;
 
-import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.R;
 import com.nucleon.maru.ViewModel.AddMeetingViewModel;
 import com.nucleon.maru.ViewModel.MainNavigator;
 import com.nucleon.maru.databinding.FragmentAddMeetingBinding;
 
 import java.text.MessageFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class AddMeetingFragment extends DialogFragment implements MainNavigator {
 
@@ -71,6 +64,25 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
     }
 
     @Override
+    public void itemCreate(View view) {
+        // Get meeting info from the form
+        String subject = binding.edtSubject.getText().toString();
+        String room = binding.spinner.getSelectedItem().toString();
+        String inputDate = binding.edtDate.getText().toString();
+        List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
+        // User data checking
+        if (!addMeetingViewModel.isFormValid(subject, room, inputDate, participants)) {
+            // Updating recyclerView
+            navigator.itemCreate(view);
+            // Close dialog fragment
+            dismiss();
+        } else {
+            // Showing error message
+            Toast.makeText(getContext(), "Please complete the form...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.createCallbackToParentActivity();
@@ -82,35 +94,6 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
             navigator = (MainNavigator) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(e.toString()+ " must implement OnButtonClickedListener");
-        }
-    }
-
-    @Override
-    public void itemCreate(View view) {
-        // Get meeting info from the form
-        String subject = binding.edtSubject.getText().toString();
-        String room = binding.spinner.getSelectedItem().toString();
-        String inputDate = binding.edtDate.getText().toString();
-        List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
-        // Parsing inputDate from String to Date
-        Date date = new Date();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        try {
-            date = dateFormat.parse(inputDate);
-        }catch (ParseException ex) {
-            Log.d("Parsing inputDate", Objects.requireNonNull(ex.getLocalizedMessage()));
-        }
-        // Data checking
-        if (subject.isEmpty() || participants.isEmpty() || room.isEmpty() || inputDate.isEmpty()){
-            Toast.makeText(getContext(), "Please complete the form...", Toast.LENGTH_SHORT).show();
-        } else {
-            // Create a meeting
-            Meeting meeting = new Meeting(date, subject, room, participants);
-            addMeetingViewModel.createMeeting(meeting);
-            // Updating recyclerView
-            navigator.itemCreate(view);
-            // Close dialog fragment
-            dismiss();
         }
     }
 }
