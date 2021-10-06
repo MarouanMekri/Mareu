@@ -33,7 +33,11 @@ public class MeetingServiceTest {
     @Test
     public void getMeetingsWithSuccess() {
         List<Meeting> meetings = apiService.getMeetings();
-        assertTrue(meetings.isEmpty());
+        Meeting meetingOne = new Meeting(date, subject, room, participants);
+        Meeting meetingTwo = new Meeting(date, subject, room, participants);
+        apiService.createMeeting(meetingOne);
+        apiService.createMeeting(meetingTwo);
+        assertTrue(meetings.size() == 2 && meetings.contains(meetingOne) && meetings.contains(meetingTwo));
     }
 
     @Test
