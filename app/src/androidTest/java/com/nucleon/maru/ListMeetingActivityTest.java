@@ -45,7 +45,7 @@ public class ListMeetingActivityTest {
     static final String DIFFERENT_DATE = "6:00";
 
     @Rule
-    public ActivityScenarioRule rule = new ActivityScenarioRule(ListMeetingActivity.class);
+    public ActivityScenarioRule<ListMeetingActivity> rule = new ActivityScenarioRule<>(ListMeetingActivity.class);
 
     @Test
     public void myMeetingsList_ShouldBeVisibleAndEmpty() {
@@ -66,7 +66,7 @@ public class ListMeetingActivityTest {
                 .perform(typeText(SUBJECT));
         onView(withId(R.id.edtParticipants))
                 .perform(typeText(PARTICIPANTS));
-        onView(withId(R.id.edtDate))
+        onView(withId(R.id.edtTime))
                 .perform(typeText(DATE));
         // When : Perform a click on add button
         onView(withId(R.id.btnAddMeeting))
@@ -96,7 +96,7 @@ public class ListMeetingActivityTest {
                 .perform(typeText(SUBJECT));
         onView(withId(R.id.edtParticipants))
                 .perform(typeText(PARTICIPANTS));
-        onView(withId(R.id.edtDate))
+        onView(withId(R.id.edtTime))
                 .perform(typeText(DATE));
         onView(withId(R.id.btnAddMeeting))
                 .perform(click());
@@ -106,7 +106,7 @@ public class ListMeetingActivityTest {
                 .perform(typeText(SUBJECT));
         onView(withId(R.id.edtParticipants))
                 .perform(typeText(PARTICIPANTS));
-        onView(withId(R.id.edtDate))
+        onView(withId(R.id.edtTime))
                 .perform(typeText(DIFFERENT_DATE));
         onView(withId(R.id.btnAddMeeting))
                 .perform(click());
@@ -132,7 +132,7 @@ public class ListMeetingActivityTest {
                 .perform(typeText(SUBJECT));
         onView(withId(R.id.edtParticipants))
                 .perform(typeText(PARTICIPANTS));
-        onView(withId(R.id.edtDate))
+        onView(withId(R.id.edtTime))
                 .perform(typeText(DATE));
         onView(withId(R.id.btnAddMeeting))
                 .perform(click());
@@ -147,7 +147,7 @@ public class ListMeetingActivityTest {
         onView(withText(containsString("B")))
                 .inRoot(isPlatformPopup())
                 .perform(click());
-        onView(withId(R.id.edtDate))
+        onView(withId(R.id.edtTime))
                 .perform(typeText(DATE));
         onView(withId(R.id.btnAddMeeting))
                 .perform(click());

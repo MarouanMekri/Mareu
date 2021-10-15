@@ -9,12 +9,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.nucleon.maru.Adapter.ListMeetingAdapter;
 import com.nucleon.maru.DI.DI;
 import com.nucleon.maru.Model.Meeting;
 import com.nucleon.maru.Service.ApiService;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,7 +21,6 @@ public class ListMeetingViewModel extends ViewModel {
     private final ApiService apiService = DI.getApiService();
 
     private final MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>();
-    private final List<Meeting> meetingList = new ArrayList<>();
 
     // Return meetings list
     public LiveData<List<Meeting>> getMeetingsLiveData() {
@@ -41,10 +38,7 @@ public class ListMeetingViewModel extends ViewModel {
         TimePickerDialog.OnTimeSetListener timeSetListener = (timePicker, hour, minute) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(selectedYear, selectedMonth, selectedDayOfMonth, hour, minute);
-            meetingList.clear();
-            meetingsLiveData.setValue(meetingList);
-            meetingList.addAll(apiService.getMeetingsFilteredByDate(calendar.getTime()));
-            meetingsLiveData.setValue(meetingList);
+            meetingsLiveData.setValue(apiService.getMeetingsFilteredByDate(calendar.getTime()));
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(context, timeSetListener, 12, 0, true);
         timePickerDialog.show();
@@ -60,20 +54,14 @@ public class ListMeetingViewModel extends ViewModel {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                meetingList.clear();
-                meetingsLiveData.setValue(meetingList);
-                meetingList.addAll(apiService.getMeetingsFilteredByRoom(newText));
-                meetingsLiveData.setValue(meetingList);
+                meetingsLiveData.setValue(apiService.getMeetingsFilteredByRoom(newText));
                 return false;
             }
         });
     }
 
     // Reset filters
-    public void resetFilters(ListMeetingAdapter adapter) {
-        meetingList.clear();
-        meetingList.addAll(apiService.getMeetings());
-        meetingsLiveData.setValue(meetingList);
-        adapter.notifyDataSetChanged();
+    public void resetFilters() {
+        meetingsLiveData.setValue(apiService.getMeetings());
     }
 }

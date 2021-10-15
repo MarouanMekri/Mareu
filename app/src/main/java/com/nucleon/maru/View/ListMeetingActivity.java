@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,6 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
         binding.listMeetings.setLayoutManager(layoutManager);
         binding.listMeetings.addItemDecoration(decoration);
         adapter = new ListMeetingAdapter(this, listMeetingViewModel.getMeetingsLiveData().getValue());
-        binding.listMeetings.setAdapter(adapter);
 
         // Observe data
         listMeetingViewModel.getMeetingsLiveData().observe(this, meetings -> {
@@ -67,6 +67,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
@@ -78,7 +79,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MainNaviga
                 listMeetingViewModel.filterByRoom(item);
                 return true;
             case R.id.filters_reset:
-                listMeetingViewModel.resetFilters(adapter);
+                listMeetingViewModel.resetFilters();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

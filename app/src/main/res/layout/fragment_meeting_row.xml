@@ -15,7 +15,8 @@
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/avatar" />
 
 
     <TextView
@@ -63,6 +64,7 @@
         app:layout_constraintHorizontal_bias="0.947"
         app:layout_constraintStart_toEndOf="@+id/item_list_avatar"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#D7000000" />
+        app:tint="#D7000000"
+        android:contentDescription="@string/avatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

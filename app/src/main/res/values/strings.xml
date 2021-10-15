@@ -4,6 +4,16 @@
     <string name="filter_option_1">Filtrer par date</string>
     <string name="filter_option_2">Filtrer par lieu</string>
     <string name="filter_reset">Réinitialiser les filtres</string>
+    <string name="subject">Sujet</string>
+    <string name="add_new_meeting">Ajouter une nouvelle réunion</string>
+    <string name="hint_subject">Sujet de la réunion</string>
+    <string name="participants">Participants</string>
+    <string name="hint_participants">Un participant par ligne</string>
+    <string name="room">Salle</string>
+    <string name="date">Date</string>
+    <string name="meeting_time">Heure de la réunion</string>
+    <string name="add">Ajouter</string>
+    <string name="avatar">Avatar</string>
     <string-array name="rooms">
         <item>Réunion A</item>
         <item>Réunion B</item>

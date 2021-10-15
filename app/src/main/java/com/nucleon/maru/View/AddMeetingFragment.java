@@ -48,7 +48,7 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
         binding.btnTime.setOnClickListener(v -> {
             // Time Set Listener.
             TimePickerDialog.OnTimeSetListener timeSetListener = (childView, hour, minute) -> {
-                binding.edtDate.setText(MessageFormat.format("{0}:{1}", hour, minute));
+                binding.edtTime.setText(MessageFormat.format("{0}:{1}", hour, minute));
                 lastSelectedHour = hour;
                 lastSelectedMinute = minute;
             };
@@ -68,17 +68,17 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
         // Get meeting info from the form
         String subject = binding.edtSubject.getText().toString();
         String room = binding.spinner.getSelectedItem().toString();
-        String inputDate = binding.edtDate.getText().toString();
+        String inputDate = binding.edtTime.getText().toString();
         List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
         // User data checking
-        if (!addMeetingViewModel.isFormValid(subject, room, inputDate, participants)) {
+        if (addMeetingViewModel.isFormValid(subject, room, inputDate, participants)) {
             // Updating recyclerView
             navigator.itemCreate(view);
             // Close dialog fragment
             dismiss();
         } else {
             // Showing error message
-            Toast.makeText(getContext(), "Please complete the form...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Veuillez vérifier les données entrées", Toast.LENGTH_SHORT).show();
         }
     }
 
