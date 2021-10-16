@@ -71,7 +71,7 @@ public class AddMeetingFragment extends DialogFragment implements MainNavigator 
         String inputDate = binding.edtTime.getText().toString();
         List<String> participants = Arrays.asList(binding.edtParticipants.getText().toString().split("\n"));
         // User data checking
-        if (addMeetingViewModel.isFormValid(subject, room, inputDate, participants)) {
+        if (addMeetingViewModel.isFormValid(getContext(), subject, room, inputDate, participants)) {
             // Updating recyclerView
             navigator.itemCreate(view);
             // Close dialog fragment
